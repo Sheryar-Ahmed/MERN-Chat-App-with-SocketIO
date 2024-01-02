@@ -11,8 +11,8 @@ app.set('trust proxy', true);
 const PORT = process.env.PORT || 3000;
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-// Enable CORS for all origins
-app.use(cors({ origin: true }));
+// Enable CORS for a specific origin
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json()); // Add this line to enable JSON parsing
 app.use(
   cookieSession({

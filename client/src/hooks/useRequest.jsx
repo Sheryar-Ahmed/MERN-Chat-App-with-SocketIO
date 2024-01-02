@@ -1,23 +1,25 @@
-import axios from 'axios';
-import { useState } from 'react';
+import BuildClient from '../utils/requestUrls';
 
-const useRequest = ({ url, method, body, onSuccess }) => {
+const useRequest = ({ url, method, body, onSuccess, onFail }) => {
 
-    const [errors, setErrors] = useState(null);
 
-    const doRequest = async (props) => {
-        setErrors(null);
+    const doRequest = async () => {
         try {
-            const { data } = await axios[method](url, { ...body, ...props });
+            const { data } = await BuildClient()[method](url, body);
             onSuccess(data);
             return data;
         } catch (error) {
-            setErrors(error.ressponse?.data)
+            console.log("Errors in useRequest", error.response?.data);
+
+            const errorMessage = error?.response?.data?.errors?.length > 0
+                ? error?.response?.data?.errors[0]
+                : error?.response?.data?.message;
+
+            onFail(errorMessage);  // Pass the error message to onFail
         }
     };
-    
-    return [doRequest, errors];
 
-}
+    return [doRequest];
+};
 
 export default useRequest;

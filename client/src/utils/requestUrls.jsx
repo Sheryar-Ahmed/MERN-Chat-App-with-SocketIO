@@ -1,3 +1,17 @@
-const Host = 'http://localhost:3000/'
+import axios from "axios";
 
-export const signUpURL = `${Host}/api/users/register`;
+
+const HOST = 'http://localhost:3000';
+
+export const loginURL = `/api/users/login`;
+export const registerURL = `/api/users/register`;
+
+
+const buildClient = () => {
+    return axios.create({
+        baseURL: HOST,
+        withCredentials: true,
+    });
+};
+
+export default buildClient;
