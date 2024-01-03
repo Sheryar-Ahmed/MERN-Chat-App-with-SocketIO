@@ -4,7 +4,7 @@ const Home = () => {
   
   return (
     <div>
-        WELCOME USER
+        Show if the user is logged in his chats else take him to the auth page.
     </div>
   )
 }
