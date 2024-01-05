@@ -84,13 +84,6 @@ const login = async (req, res) => {
     }
 };
 
-
-
-
-
-
-
-
 const currentUserInfo = async (req, res) => {
     try {
         const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY);
