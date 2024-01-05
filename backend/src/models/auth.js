@@ -45,6 +45,6 @@ registerSchema.methods.comparePassword = async function(candidatePassword) {
 };
 
 // Create a Mongoose model based on the schema
-const userRegister = mongoose.model('Register', registerSchema);
+const userRegister = mongoose.model('Users', registerSchema);
 
 module.exports = userRegister;
