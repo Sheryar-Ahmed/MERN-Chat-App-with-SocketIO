@@ -93,11 +93,6 @@ const login = async (req, res) => {
 
 const currentUserInfo = async (req, res) => {
     try {
-        if (!req.session?.jwt) {
-            return res.status(404).json({
-                currentUser: null
-            })
-        }
         const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY);
         res.status(200).json({
             success: true,
@@ -108,6 +103,32 @@ const currentUserInfo = async (req, res) => {
     }
 };
 
+
+const allUsers = async (req, res) => {
+    try {
+        const keyword = req.query.search ? {
+            $or: [
+                { username: { $regex: req.query.search, $options: "i" } },
+                { email: { $regex: req.query.search, $options: "i" } },
+            ]
+        } :
+            {};
+
+        const users = await User.find(keyword).find({ _id: { $ne: req.currentUser.id } });
+
+        res.status(200).json({
+            success: true,
+            users
+        })
+
+
+    } catch (error) {
+        console.log("Error occured during all users", error)
+        res.status(500).json({
+            message: "Error occured during retrievel of all users."
+        })
+    }
+}
 
 
 
@@ -124,4 +145,4 @@ const loginSchema = joi.object({
     password: joi.string().min(9).required(),
 });
 
-module.exports = { register, login, currentUserInfo };
+module.exports = { register, login, currentUserInfo, allUsers };
