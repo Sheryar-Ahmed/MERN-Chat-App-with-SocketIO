@@ -15,7 +15,7 @@ const accessChat = async (req, res) => {
         users: {
             $all: [req.currentUser.id, userId]
         }
-    }).populate("users latestMessage.sender", "username email");
+    }).populate("users");
 
     if (isChat) {
         return res.status(200).json({
@@ -31,10 +31,11 @@ const accessChat = async (req, res) => {
     };
 
     try {
-        const chat = await Chat.create(chatData).populate("users");
+        const createdChat = await Chat.create(chatData);
+        const FullChat = await Chat.findOne({ _id: createdChat._id }).populate("users")
         return res.status(201).json({
             success: true,
-            chat
+            FullChat
         });
     } catch (error) {
         console.error("Error occurred during chat creation", error);
