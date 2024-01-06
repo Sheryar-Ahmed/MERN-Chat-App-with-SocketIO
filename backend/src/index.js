@@ -3,6 +3,8 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const authRoute = require("./routes/authRoute.js");
+const chatRoute = require("./routes/chatRoute.js");
+
 const cookieSession = require('cookie-session');
 dotenv.config();
 
@@ -40,6 +42,11 @@ app.get('/', (req, res) => {
 
 // User auth router
 app.use(authRoute);
+// User chat router
+app.use(chatRoute);
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Listening on Port ${PORT}.`);
