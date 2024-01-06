@@ -1,9 +1,6 @@
 const Chat = require('../models/chat');
 const User = require('../models/auth');
 
-
-
-
 const accessChat = async (req, res) => {
     const { userId } = req.body;
 
@@ -50,8 +47,6 @@ const accessChat = async (req, res) => {
     }
 };
 
-
-
 const allUserChats = async (req, res) => {
     try {
         const userId = req.currentUser.id;
@@ -77,8 +72,6 @@ const allUserChats = async (req, res) => {
         });
     }
 }
-
-
 
 const createGroupChat = async (req, res) => {
     if (!req.body.users || !req.body.groupName) {
@@ -111,11 +104,11 @@ const createGroupChat = async (req, res) => {
             path: "groupAdmin",
             model: "Users",
         })
-        .populate({
-            path: "users",
-            match: { _id: { $ne: req.currentUser.id } }, // Exclude current user
-            model: "Users", 
-        });
+            .populate({
+                path: "users",
+                match: { _id: { $ne: req.currentUser.id } }, // Exclude current user
+                model: "Users",
+            });
         return res.status(201).json({
             success: true,
             groupChat: FullChat
@@ -131,5 +124,45 @@ const createGroupChat = async (req, res) => {
 }
 
 
+const renameGroupName = async (req, res) => {
+    const { groupName, chatId } = req.body;
 
-module.exports = { accessChat, allUserChats, createGroupChat };
+    if (!groupName || !chatId) {
+        return res.status(400).json({
+            message: "Please provide valid information"
+        })
+    };
+
+
+    const updatedgroupName = await Chat.findByIdAndUpdate(
+        chatId,
+        {
+            chatName: groupName
+        },
+        {
+            new: true
+        }
+    ).populate({
+        path: "groupAdmin",
+        model: "Users",
+    }).populate({
+        path: "users",
+        match: { _id: { $ne: req.currentUser.id } }, // Exclude current user
+        model: "Users",
+    });
+
+
+    if (!updatedgroupName) {
+        return res.status(400).json({
+            success: false,
+            message: "Something bad happened during updation"
+        });
+    }
+    return res.status(201).json({
+        success: true,
+        groupChat: updatedgroupName
+    })
+}
+
+
+module.exports = { accessChat, allUserChats, createGroupChat, renameGroupName };
