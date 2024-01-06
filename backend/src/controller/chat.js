@@ -46,4 +46,23 @@ const accessChat = async (req, res) => {
     }
 };
 
-module.exports = { accessChat };
+
+
+const allUserChats = async (req, res) => {
+    try {
+        const userId = req.currentUser.id;
+        const allChats = await Chat.find({ 'users': userId });
+        return res.status(200).json({
+            success: true,
+            userChats: allChats,
+        })
+    } catch (error) {
+        console.log("Error occured during fetching of userchats", error);
+        return res.status(500).json({
+            success: false,
+            message: "Something bad happened"
+        });
+    }
+}
+
+module.exports = { accessChat, allUserChats };
