@@ -165,4 +165,42 @@ const renameGroupName = async (req, res) => {
 }
 
 
-module.exports = { accessChat, allUserChats, createGroupChat, renameGroupName };
+const addUsersToGroup = async (req, res) => {
+    const { chatId, userId } = req.body;
+    if (!userId || !chatId) {
+        return res.status(400).json({
+            message: "Please provide valid information"
+        })
+    };
+
+    const added = await Chat.findByIdAndUpdate(
+        chatId,
+        {
+            $push: { users: userId }
+        },
+        {
+            new: true
+        }
+    ).populate({
+        path: "groupAdmin",
+        model: "Users",
+    }).populate({
+        path: "users",
+        match: { _id: { $ne: req.currentUser.id } }, // Exclude current user
+        model: "Users",
+    });
+
+    if (!added) {
+        return res.status(400).json({
+            success: false,
+            message: "Something bad happened during adding user to the group"
+        });
+    }
+    return res.status(201).json({
+        success: true,
+        groupChatNewUsers: added
+    })
+}
+
+
+module.exports = { accessChat, allUserChats, createGroupChat, renameGroupName, addUsersToGroup };
