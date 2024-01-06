@@ -203,4 +203,42 @@ const addUsersToGroup = async (req, res) => {
 }
 
 
-module.exports = { accessChat, allUserChats, createGroupChat, renameGroupName, addUsersToGroup };
+const removeUsersFromGroup = async (req, res) => {
+    const { chatId, userId } = req.body;
+    if (!userId || !chatId) {
+        return res.status(400).json({
+            message: "Please provide valid information"
+        })
+    };
+
+    const removed = await Chat.findByIdAndUpdate(
+        chatId,
+        {
+            $pull: { users: userId }
+        },
+        {
+            new: true
+        }
+    ).populate({
+        path: "groupAdmin",
+        model: "Users",
+    }).populate({
+        path: "users",
+        match: { _id: { $ne: req.currentUser.id } }, // Exclude current user
+        model: "Users",
+    });
+
+    if (!removed) {
+        return res.status(400).json({
+            success: false,
+            message: "Something bad happened during removal of user from the group"
+        });
+    }
+    return res.status(201).json({
+        success: true,
+        groupChatNewUsers: removed
+    })
+}
+
+
+module.exports = { accessChat, allUserChats, createGroupChat, renameGroupName, addUsersToGroup, removeUsersFromGroup };
