@@ -1,12 +1,13 @@
 import React from 'react'
 import Header from './Header';
+import Chats from './Chats';
 
 const Home = () => {
-  
+
   return (
-    <div>
+    <div className='w-full h-screen flex flex-col items-start justify-start'>
       <Header />
-        Show if the user is logged in his chats else take him to the auth page.
+      <Chats />
     </div>
   )
 }
