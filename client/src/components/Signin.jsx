@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
-import useRequest from '../hooks/useRequest';
-import { loginURL } from '../utils/requestUrls';
+// import useRequest from '../hooks/useRequest';
+// import { loginURL } from '../utils/requestUrls';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { getCookieValue } from '../utils/cookieParser';
+import { userLogin } from '../state/actions/userAction';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Sigin = () => {
 
@@ -13,32 +15,33 @@ const Sigin = () => {
     const [password, setPassword] = React.useState('');
 
     const navigate = useNavigate();
-
-    const [doRequest] = useRequest({
-        url: loginURL,
-        method: 'post',
-        body: {
-            email,
-            password
-        },
-        onSuccess: () => navigate('/'),
-        onFail: (errorMessage) => {
-            toast.error(errorMessage, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-        }
-    });
+    const dispatch = useDispatch();
+    // const [doRequest] = useRequest({
+    //     url: loginURL,
+    //     method: 'post',
+    //     body: {
+    //         email,
+    //         password
+    //     },
+    //     onSuccess: () => navigate('/'),
+    //     onFail: (errorMessage) => {
+    //         toast.error(errorMessage, {
+    //             position: "top-right",
+    //             autoClose: 5000,
+    //             hideProgressBar: false,
+    //             closeOnClick: true,
+    //             pauseOnHover: true,
+    //             draggable: true,
+    //             progress: undefined,
+    //             theme: "light",
+    //         });
+    //     }
+    // });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        doRequest();
+        // doRequest();
+        dispatch(userLogin(email, password));
     }
 
 
