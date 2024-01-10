@@ -1,47 +1,46 @@
-import React from 'react';
-import useRequest from '../hooks/useRequest';
-import { registerURL } from '../utils/requestUrls';
+import React, {useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { getCookieValue } from '../utils/cookieParser';
+import { useDispatch } from 'react-redux';
+import { userRegister } from '../state/actions/userAction';
 
 
 const Signup = () => {
-
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [email, setEmail] = React.useState('');
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
 
-    const [doRequest] = useRequest({
-        url: registerURL,
-        method: 'post',
-        body: {
-            username,
-            email,
-            password
-        },
-        onSuccess: () => navigate('/'),
-        onFail: (errorMessage) => {
-            toast.error(errorMessage, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-        }
-    });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        doRequest();
+        dispatch(userRegister({
+            username,
+            email,
+            password,
+            onSuccess: (data) => {
+                // Handle success logic, e.g., redirect or any other action
+                navigate('/');
+            },
+            onFail: (errorMessage) => {
+                // Handle failure logic, e.g., show an error message
+                toast.error(errorMessage, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            }
+        }));
     }
 
     useEffect(() => {
@@ -133,7 +132,7 @@ const Signup = () => {
                             type="submit"
                             className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
-                            Sign in
+                            Sign up
                         </button>
                         <ToastContainer />
                     </div>
