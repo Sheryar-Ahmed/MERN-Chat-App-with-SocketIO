@@ -17,7 +17,7 @@ const ChatList = () => {
         </Button>
       </div>
       {/* chatslist */}
-      <div className='w-full p-2 bg-[#ECEFF1] h-full max-h-full flex flex-col items-center justify-start gap-2 overflow-y-auto'>
+      <div className='w-full mt-2 p-2 bg-[#ECEFF1] h-full max-h-full flex flex-col items-center justify-start gap-2 overflow-y-auto'>
         {chatListDynamic.map(({ id, Message, username, Time }) =>
           <ChatCard id={id} Message={Message} username={username} Time={Time} />
         )}
