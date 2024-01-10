@@ -40,7 +40,8 @@ const ChatList = () => {
 
 
 
-
+  const { loading, chats } = useSelector((state) => state.chats);
+  console.log("cha", chats);
 
   return (
     <div className='min-w-[320px] w-1/4 border-r p-4 h-full'>
@@ -55,8 +56,8 @@ const ChatList = () => {
       </div>
       {/* chatslist */}
       <div className='w-full mt-2 p-2 bg-[#ECEFF1] h-full max-h-full flex flex-col items-center justify-start gap-2 overflow-y-auto'>
-        {chatListDynamic.map(({ id, Message, username, Time }) =>
-          <ChatCard id={id} Message={Message} username={username} Time={Time} />
+        {chats.map(({ id, Message, users, Time }) =>
+          <ChatCard id={id} Message={Message} username={users[1].username} Time={Time} />
         )}
       </div>
 
