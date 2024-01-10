@@ -1,9 +1,46 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import ChatCard from './ChatCard';
+import { userChatList } from '../state/actions/chatActions';
+import { useDispatch, useSelector } from 'react-redux';
+
+
+
 const ChatList = () => {
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    dispatch(userChatList({
+      onSuccess: (data) => {
+        // Handle success logic, e.g., redirect or any other action
+        console.log(data);
+      },
+      onFail: (errorMessage) => {
+        // Handle failure logic, e.g., show an error message
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    }));
+  }, [dispatch])
+
+
+
+
+
+
+
+
 
   return (
     <div className='min-w-[320px] w-1/4 border-r p-4 h-full'>
