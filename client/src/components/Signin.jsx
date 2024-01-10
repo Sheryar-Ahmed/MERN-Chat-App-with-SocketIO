@@ -16,32 +16,31 @@ const Sigin = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    // const [doRequest] = useRequest({
-    //     url: loginURL,
-    //     method: 'post',
-    //     body: {
-    //         email,
-    //         password
-    //     },
-    //     onSuccess: () => navigate('/'),
-    //     onFail: (errorMessage) => {
-    //         toast.error(errorMessage, {
-    //             position: "top-right",
-    //             autoClose: 5000,
-    //             hideProgressBar: false,
-    //             closeOnClick: true,
-    //             pauseOnHover: true,
-    //             draggable: true,
-    //             progress: undefined,
-    //             theme: "light",
-    //         });
-    //     }
-    // });
 
     const handleSubmit = (e) => {
         e.preventDefault();
         // doRequest();
-        dispatch(userLogin(email, password));
+        dispatch(userLogin({
+            email,
+            password,
+            onSuccess: (data) => {
+                // Handle success logic, e.g., redirect or any other action
+                navigate('/');
+            },
+            onFail: (errorMessage) => {
+                // Handle failure logic, e.g., show an error message
+                toast.error(errorMessage, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            }
+        }));
     }
 
 
