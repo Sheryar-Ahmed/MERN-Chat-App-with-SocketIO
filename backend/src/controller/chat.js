@@ -47,6 +47,26 @@ const accessChat = async (req, res) => {
     }
 };
 
+
+
+const searchAllUsers = async (req, res) => {
+
+    const keyword = req.query.search ? {
+        $or: [
+            { username: { $regex: req.query.search, $options: "i" } },
+            { email: { $regex: req.query.search, $options: "i" } },
+        ]
+    } : {};
+
+    const users = await User.find(keyword).find({ _id: { $ne: req.currentUser.id } });
+    res.status(200).json({
+        success: true,
+        users
+    })
+
+};
+
+
 const allUserChats = async (req, res) => {
     try {
         const userId = req.currentUser.id;
@@ -241,4 +261,4 @@ const removeUsersFromGroup = async (req, res) => {
 }
 
 
-module.exports = { accessChat, allUserChats, createGroupChat, renameGroupName, addUsersToGroup, removeUsersFromGroup };
+module.exports = { accessChat, allUserChats, searchAllUsers, createGroupChat, renameGroupName, addUsersToGroup, removeUsersFromGroup };
