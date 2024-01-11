@@ -23,7 +23,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSearch } from '../state/actions/chatActions';
-
+import SearchModal from './SearchModal';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -192,6 +192,11 @@ export default function PrimarySearchAppBar(props) {
     </Menu>
   );
 
+
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+
   const [searchTerm, setSearchTerm] = React.useState('');
   const dispatch = useDispatch();
 
@@ -216,12 +221,15 @@ export default function PrimarySearchAppBar(props) {
           });
         }
       }));
+      handleOpen();
     }
   };
 
 
 
-  const { users } = useSelector((state) => state.searchUsers);
+  const { users, loading } = useSelector((state) => state.searchUsers);
+
+
 
 
   return (
@@ -256,8 +264,9 @@ export default function PrimarySearchAppBar(props) {
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyPress={handleEnterKeyPress}
             />
-            
+            <SearchModal open={!loading && open} users={users} setOpen={setOpen} />
           </Search>
+
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
