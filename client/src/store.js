@@ -1,12 +1,13 @@
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import { thunk } from "redux-thunk";
-import {composeWithDevTools} from 'redux-devtools-extension';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { userReducer } from "./state/reducers/userReducer";
-import { chatsReducers } from "./state/reducers/chatReducer";
+import { chatUsersSearch, chatsReducers } from "./state/reducers/chatReducer";
 
 const reducer = combineReducers({
     user: userReducer,
-    chats: chatsReducers
+    chats: chatsReducers,
+    searchUsers: chatUsersSearch
 });
 
 
