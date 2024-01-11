@@ -21,6 +21,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import { useDispatch, useSelector } from 'react-redux';
+import { userSearch } from '../state/actions/chatActions';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -68,7 +70,7 @@ const drawerWidth = 240;
 
 
 export default function PrimarySearchAppBar(props) {
-    const { window } = props;
+  const { window } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -190,6 +192,38 @@ export default function PrimarySearchAppBar(props) {
     </Menu>
   );
 
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const dispatch = useDispatch();
+
+  const handleEnterKeyPress = async (event) => {
+    if (event.key === 'Enter') {
+      dispatch(userSearch({
+        keyword: searchTerm,
+        onSuccess: (data) => {
+          console.log("search users data", data)
+        },
+        onFail: (errorMessage) => {
+          // Handle failure logic, e.g., show an error message
+          toast.error(errorMessage, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      }));
+    }
+  };
+
+
+
+  const { users } = useSelector((state) => state.searchUsers);
+
+
   return (
     <Box sx={{ width: '100%', flexGrow: 1 }}>
       <AppBar position="static">
@@ -219,7 +253,10 @@ export default function PrimarySearchAppBar(props) {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyPress={handleEnterKeyPress}
             />
+            
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
