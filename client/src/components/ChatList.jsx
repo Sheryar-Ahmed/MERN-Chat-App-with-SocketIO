@@ -54,11 +54,11 @@ const ChatList = () => {
       </div>
       {/* chatslist */}
       <div className='w-full mt-2 p-2 bg-[#ECEFF1] h-full max-h-full flex flex-col items-center justify-start gap-2 overflow-y-auto'>
-        {chats.map(({ _id, Message, users, Time }) => (
+        {chats.map(({ _id, latestMessage, chatName, isGroupChat, users, Time }) => (
           <ChatCard
             id={_id}
-            Message={Message}
-            username={users[1].username}
+            Message={latestMessage}
+            username={isGroupChat ? chatName : users[1].username}
             Time={Time}
             isSelected={selectedChatId === _id}
             onClick={() => handleChatCardClick(_id)}
