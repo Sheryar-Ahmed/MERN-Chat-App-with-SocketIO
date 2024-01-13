@@ -5,10 +5,13 @@ import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOu
 import ChatCard from './ChatCard';
 import { userChatList } from '../state/actions/chatActions';
 import { useDispatch, useSelector } from 'react-redux';
+import GroupModal from './GroupModal';
 
 const ChatList = () => {
   const dispatch = useDispatch();
   const [selectedChatId, setSelectedChatId] = useState(null);
+  const [openGroupChat, setOpenGroupChat] = useState(false);
+  const handleGroupChatOpen = () => setOpenGroupChat(true);
 
   useEffect(() => {
     dispatch(
@@ -48,10 +51,14 @@ const ChatList = () => {
         <Typography variant='h6' component='h6'>
           Chats
         </Typography>
-        <Button variant='outlined' endIcon={<AddCircleOutlineOutlinedIcon />}>
-          Delete
+        <Button
+          onClick={handleGroupChatOpen}
+          variant='outlined' endIcon={<AddCircleOutlineOutlinedIcon />}>
+          New Group Chat
         </Button>
       </div>
+      {/* GroupChat Creation Modal */}
+      <GroupModal open={openGroupChat} setOpen={setOpenGroupChat} />
       {/* chatslist */}
       <div className='w-full mt-2 p-2 bg-[#ECEFF1] h-full max-h-full flex flex-col items-center justify-start gap-2 overflow-y-auto'>
         {chats.map(({ _id, latestMessage, chatName, isGroupChat, users, Time }) => (
