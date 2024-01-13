@@ -2,7 +2,7 @@ import { ACCESS_FAIL, ACCESS_REQUEST, ACCESS_SUCCESS, CHATS_FAIL, CHATS_REQUEST,
 import { accessChatUrl, chatSearchUserUrl, chatUrl, createGroupChatURL } from '../../utils/requestUrls';
 import buildClient from '../../utils/requestUrls';
 
-export const userChatList = ({ email, password, onSuccess, onFail }) => async (dispatch) => {
+export const userChatList = ({ onSuccess, onFail }) => async (dispatch) => {
     try {
         dispatch({ type: CHATS_REQUEST });
 
@@ -14,8 +14,8 @@ export const userChatList = ({ email, password, onSuccess, onFail }) => async (d
             withCredentials: true
         };
 
-        const { data } = await buildClient().get(chatUrl, { email, password }, config);
-        console.log("data", data)
+        const { data } = await buildClient().get(chatUrl, config);
+        console.log("user chats list data", data)
         dispatch({ type: CHATS_SUCCESS, payload: data.userChats });
 
         // Call the onSuccess callback if provided
@@ -128,7 +128,16 @@ export const createGroupChat = ({ groupName, users, onSuccess, onFail }) => asyn
         const { data } = await buildClient().post(createGroupChatURL, { groupName, users }, config);
         console.log("data", data)
         dispatch({ type: CREATE_GROUP_CHAT_SUCCESS, payload: data.groupChat });
-
+        dispatch(userChatList({
+            onSuccess: (data) => {
+                // Handle success logic, e.g., redirect or any other action
+                console.log(data);
+            },
+            onFail: (errorMessage) => {
+                // Handle failure logic, e.g., show an error message
+                console.log(errorMessage)
+            },
+        }))
         // Call the onSuccess callback if provided
         if (onSuccess) {
             onSuccess(data);
