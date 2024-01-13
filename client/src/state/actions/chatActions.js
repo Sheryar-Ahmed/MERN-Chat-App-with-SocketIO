@@ -1,5 +1,5 @@
-import { ACCESS_FAIL, ACCESS_REQUEST, ACCESS_SUCCESS, CHATS_FAIL, CHATS_REQUEST, CHATS_SUCCESS, USER_CHATS_SEARCH_FAIL, USER_CHATS_SEARCH_REQUEST, USER_CHATS_SEARCH_SUCCESS } from '../constants/chatConstant';
-import { accessChatUrl, chatSearchUserUrl, chatUrl } from '../../utils/requestUrls';
+import { ACCESS_FAIL, ACCESS_REQUEST, ACCESS_SUCCESS, CHATS_FAIL, CHATS_REQUEST, CHATS_SUCCESS, CREATE_GROUP_CHAT_FAIL, CREATE_GROUP_CHAT_REQUEST, CREATE_GROUP_CHAT_SUCCESS, USER_CHATS_SEARCH_FAIL, USER_CHATS_SEARCH_REQUEST, USER_CHATS_SEARCH_SUCCESS } from '../constants/chatConstant';
+import { accessChatUrl, chatSearchUserUrl, chatUrl, createGroupChatURL } from '../../utils/requestUrls';
 import buildClient from '../../utils/requestUrls';
 
 export const userChatList = ({ email, password, onSuccess, onFail }) => async (dispatch) => {
@@ -104,6 +104,42 @@ export const accessChat = ({ userId, onSuccess, onFail }) => async (dispatch) =>
             : error?.response?.data?.message;
 
         dispatch({ type: ACCESS_FAIL, payload: errorMessage });
+
+        // Call the onFail callback if provided
+        if (onFail) {
+            onFail(errorMessage);
+        }
+    }
+};
+
+
+export const createGroupChat = ({ groupName, users, onSuccess, onFail }) => async (dispatch) => {
+    try {
+        dispatch({ type: CREATE_GROUP_CHAT_REQUEST });
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                'access-control-allow-credentials': true
+            },
+            withCredentials: true
+        };
+        users = users.map((user) => user.id);
+        const { data } = await buildClient().post(createGroupChatURL, { groupName, users }, config);
+        console.log("data", data)
+        dispatch({ type: CREATE_GROUP_CHAT_SUCCESS, payload: data.groupChat });
+
+        // Call the onSuccess callback if provided
+        if (onSuccess) {
+            onSuccess(data);
+        }
+    } catch (error) {
+        console.log("error during creationn of group chats", error);
+        const errorMessage = error?.response?.data?.errors?.length > 0
+            ? error?.response?.data?.errors[0]
+            : error?.response?.data?.message;
+
+        dispatch({ type: CREATE_GROUP_CHAT_FAIL, payload: errorMessage });
 
         // Call the onFail callback if provided
         if (onFail) {
