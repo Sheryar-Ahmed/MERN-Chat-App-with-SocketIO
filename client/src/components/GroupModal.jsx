@@ -75,7 +75,8 @@ export default function GroupModal({ open, setOpen }) {
         setSelectedGroupMembers(selectedGroupMembers.filter((select) => select.id != user.id));
     }
 
-    const handlesubmit = () => {
+    const handlesubmit = (e) => {
+        e.preventDefault();
         console.log("hanldesubmit called")
         dispatch(createGroupChat({
             groupName,
@@ -97,6 +98,7 @@ export default function GroupModal({ open, setOpen }) {
                 });
             }
         }));
+        handleClose();
     };
 
 
