@@ -38,8 +38,7 @@ const ChatList = () => {
   }, [dispatch]);
 
   const { loading, chats } = useSelector((state) => state.chats);
-  console.log('cha', chats);
-
+  
   const handleChatCardClick = (chatId) => {
     setSelectedChatId(chatId === selectedChatId ? null : chatId);
   };
