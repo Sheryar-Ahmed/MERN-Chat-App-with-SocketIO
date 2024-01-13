@@ -21,7 +21,7 @@ const accessChat = async (req, res) => {
     if (isChat) {
         return res.status(200).json({
             success: true,
-            isChat
+            FullChat: isChat
         });
     }
 
