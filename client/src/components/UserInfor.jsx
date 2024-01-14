@@ -22,11 +22,9 @@ const style = {
 };
 
 export default function UserInfoModal({ open, setOpen, user }) {
-    const dispatch = useDispatch();
-
 
     const handleClose = () => setOpen(false);
-    
+
     return (
         <div>
             <Modal
