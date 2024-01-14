@@ -21,34 +21,11 @@ const style = {
     gap: '20px'
 };
 
-export default function UserInfoModal({ open, setOpen }) {
+export default function UserInfoModal({ open, setOpen, user }) {
     const dispatch = useDispatch();
 
 
     const handleClose = () => setOpen(false);
-
-    React.useEffect(() => {
-        dispatch(userDetails({
-            onSuccess: (data) => {
-                console.log("data for user", data)
-            },
-            onFail: (errorMessage) => {
-                // Handle failure logic, e.g., show an error message
-                toast.error(errorMessage, {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
-            }
-        }));
-    }, [dispatch])
-
-    const { user } = useSelector((state) => state.user);
     
     return (
         <div>
