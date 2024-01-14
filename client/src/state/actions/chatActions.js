@@ -89,7 +89,7 @@ export const accessChat = ({ userId, onSuccess, onFail }) => async (dispatch) =>
             withCredentials: true
         };
 
-        const { data } = await buildClient().get(accessChatUrl, { userId }, config);
+        const { data } = await buildClient().post(accessChatUrl, { userId }, config);
         console.log("data", data)
         dispatch({ type: ACCESS_SUCCESS, payload: data.FullChat });
 
