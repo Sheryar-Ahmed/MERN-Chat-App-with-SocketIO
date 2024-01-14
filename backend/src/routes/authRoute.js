@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/api/users/register', register);
 router.post('/api/users/login', login);
-router.post('/api/users/me', isAuthenticated, currentUserInfo);
+router.get('/api/users/me', isAuthenticated, currentUserInfo);
 router.get('/api/users/allUsers', isAuthenticated, allUsers);
 
 module.exports = router;
