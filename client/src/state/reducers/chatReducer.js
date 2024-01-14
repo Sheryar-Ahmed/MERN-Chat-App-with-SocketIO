@@ -1,4 +1,4 @@
-import { ACCESS_FAIL, ACCESS_REQUEST, ACCESS_SUCCESS, CHATS_FAIL, CHATS_REQUEST, CHATS_SUCCESS, CREATE_GROUP_CHAT_FAIL, CREATE_GROUP_CHAT_REQUEST, CREATE_GROUP_CHAT_SUCCESS, USER_CHATS_SEARCH_FAIL, USER_CHATS_SEARCH_REQUEST, USER_CHATS_SEARCH_SUCCESS } from '../constants/chatConstant';
+import { ACCESS_FAIL, ACCESS_REQUEST, ACCESS_SUCCESS, CHATS_FAIL, CHATS_REQUEST, CHATS_SUCCESS, CREATE_GROUP_CHAT_FAIL, CREATE_GROUP_CHAT_REQUEST, CREATE_GROUP_CHAT_SUCCESS, SELECTED_CHAT_FAIL, SELECTED_CHAT_REQUEST, SELECTED_CHAT_SUCCESS, USER_CHATS_SEARCH_FAIL, USER_CHATS_SEARCH_REQUEST, USER_CHATS_SEARCH_SUCCESS } from '../constants/chatConstant';
 
 export const chatsReducers = (state = { chats: [] }, action) => {
     switch (action.type) {
@@ -99,6 +99,34 @@ export const createGroupChatReducer = (state = { groupChat: {} }, action) => {
                 ...state,
                 loading: false,
                 groupChat: {},
+                error: action.payload
+            };
+        default:
+            return state;
+    }
+};
+
+
+
+export const SelectedChat = (state = { selectedChat: {} }, action) => {
+    switch (action.type) {
+        case SELECTED_CHAT_REQUEST:
+            return {
+                loading: true,
+                selectedChat: {},
+            };
+        case SELECTED_CHAT_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                selectedChat: action.payload,
+                error: null,
+            };
+        case SELECTED_CHAT_FAIL:
+            return {
+                ...state,
+                loading: false,
+                selectedChat: {},
                 error: action.payload
             };
         default:
