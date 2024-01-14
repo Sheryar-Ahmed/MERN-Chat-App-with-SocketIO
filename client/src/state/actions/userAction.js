@@ -73,7 +73,7 @@ export const userRegister = ({ username, email, password, onSuccess, onFail }) =
 
 
 
-export const userDetails = () => async (dispatch) => {
+export const userDetails = ({onFail, onSuccess}) => async (dispatch) => {
   try {
     dispatch({ type: USER_DETAILS_REQUEST });
 
