@@ -9,6 +9,6 @@ router.get('/api/chat/users', isAuthenticated, searchAllUsers);
 router.post('/api/chat/group', isAuthenticated, createGroupChat);
 router.put('/api/chat/group/rename', isAuthenticated, renameGroupName);
 router.post('/api/chat/group/add', isAuthenticated, addUsersToGroup);
-router.delete('/api/chat/group/remove', isAuthenticated, removeUsersFromGroup);
+router.delete('/api/chat/group/remove/:chatId/:userId', isAuthenticated, removeUsersFromGroup);
 
 module.exports = router;

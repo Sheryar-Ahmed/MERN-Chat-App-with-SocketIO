@@ -224,7 +224,7 @@ const addUsersToGroup = async (req, res) => {
 
 
 const removeUsersFromGroup = async (req, res) => {
-    const { chatId, userId } = req.body;
+    const { chatId, userId } = req.params;
     if (!userId || !chatId) {
         return res.status(400).json({
             message: "Please provide valid information"
