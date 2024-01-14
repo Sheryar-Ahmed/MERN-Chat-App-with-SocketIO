@@ -32,6 +32,7 @@ const register = async (req, res) => {
 
         const jwtsign = jwt.sign({
             id: user.id,
+            username: user.username,
             email: user.email
         }, process.env.JWT_KEY);
 
@@ -72,6 +73,7 @@ const login = async (req, res) => {
         }
         const jwtsign = jwt.sign({
             id: user.id,
+            username: user.username,
             email: user.email
         }, process.env.JWT_KEY);
 
