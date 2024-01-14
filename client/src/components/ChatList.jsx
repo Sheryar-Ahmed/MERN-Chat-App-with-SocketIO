@@ -3,9 +3,10 @@ import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import ChatCard from './ChatCard';
-import { userChatList } from '../state/actions/chatActions';
+import { accessChat, userChatList } from '../state/actions/chatActions';
 import { useDispatch, useSelector } from 'react-redux';
 import GroupModal from './GroupModal';
+import { toast, ToastContainer } from 'react-toastify'
 
 const ChatList = () => {
   const dispatch = useDispatch();
@@ -38,9 +39,28 @@ const ChatList = () => {
   }, [dispatch]);
 
   const { loading, chats } = useSelector((state) => state.chats);
-  
-  const handleChatCardClick = (chatId) => {
+
+  const handleChatCardClick = (chatId, user) => {
     setSelectedChatId(chatId === selectedChatId ? null : chatId);
+    dispatch(accessChat({
+      userId: user.id,
+      onSuccess: (data) => {
+        console.log("data for user", data)
+      },
+      onFail: (errorMessage) => {
+        // Handle failure logic, e.g., show an error message
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    }));
   };
 
   return (
@@ -67,10 +87,11 @@ const ChatList = () => {
             username={isGroupChat ? chatName : users[1].username}
             Time={Time}
             isSelected={selectedChatId === _id}
-            onClick={() => handleChatCardClick(_id)}
+            onClick={() => handleChatCardClick(_id, users[1])}
           />
         ))}
       </div>
+      <ToastContainer />
     </div>
   );
 };
