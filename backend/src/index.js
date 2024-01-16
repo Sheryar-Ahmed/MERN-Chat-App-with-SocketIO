@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const authRoute = require("./routes/authRoute.js");
 const chatRoute = require("./routes/chatRoute.js");
+const messageRoute = require('./routes/messageRoute.js');
 
 const cookieSession = require('cookie-session');
 dotenv.config();
@@ -42,9 +43,10 @@ app.get('/', (req, res) => {
 
 // User auth router
 app.use(authRoute);
-// User chat router
+// chat router
 app.use(chatRoute);
-
+// message chat router
+app.use(messageRoute);
 
 
 
