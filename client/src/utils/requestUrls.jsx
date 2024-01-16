@@ -15,6 +15,7 @@ export const renameGroupURL = `/api/chat/group/rename`;
 export const addMembersToGroupURL = `/api/chat/group/add`;
 export const removeFromGroupURL = `/api/message/group/remove`;
 export const sendMessageURL = `/api/message`;  // POST
+export const getAllMessagesURL = `/api/messages`;  // GET with the chatID
 
 const buildClient = () => {
     return axios.create({
