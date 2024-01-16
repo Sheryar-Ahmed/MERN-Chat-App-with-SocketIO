@@ -82,7 +82,7 @@ export default function PrimarySearchAppBar(props) {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
+        BuzzTalk
       </Typography>
       <Divider />
       <List>
@@ -252,7 +252,7 @@ export default function PrimarySearchAppBar(props) {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            BuzzTalk
           </Typography>
           <Search>
             <SearchIconWrapper>
