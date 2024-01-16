@@ -7,7 +7,7 @@ import { selectedChatAction, userChatList } from '../state/actions/chatActions';
 import { useDispatch, useSelector } from 'react-redux';
 import GroupModal from './GroupModal';
 import { toast, ToastContainer } from 'react-toastify';
-import {userDetails} from '../state/actions/userAction';
+import { userDetails } from '../state/actions/userAction';
 
 const ChatList = () => {
   const dispatch = useDispatch();
@@ -103,10 +103,10 @@ const ChatList = () => {
       <GroupModal open={openGroupChat} setOpen={setOpenGroupChat} />
       {/* chatslist */}
       <div className='w-full mt-2 p-2 bg-[#ECEFF1] h-full max-h-full flex flex-col items-center justify-start gap-2 overflow-y-auto'>
-        {chats.map(({ _id, latestMessage, chatName, isGroupChat, users, Time }) => (
+        {chats?.map(({ _id, latestMessage, chatName, isGroupChat, users, Time }) => (
           <ChatCard
             id={_id}
-            Message={latestMessage}
+            Message={latestMessage?.content}
             username={isGroupChat ? chatName : users[1].username}
             Time={Time}
             isSelected={selectedChatId === _id}
