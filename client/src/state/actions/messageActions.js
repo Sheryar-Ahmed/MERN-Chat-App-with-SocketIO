@@ -15,7 +15,7 @@ export const sendMessageAction = ({ chatId, content, onFail, onSuccess }) => asy
         };
 
         const { data } = await buildClient().post(sendMessageURL, { content, chatId }, config);
-        dispatch({ type: SEND_MESSAGE_SUCCESS, payload: data.currentUser });
+        dispatch({ type: SEND_MESSAGE_SUCCESS, payload: data.message });
 
         // Call the onSuccess callback if provided
         if (onSuccess) {
