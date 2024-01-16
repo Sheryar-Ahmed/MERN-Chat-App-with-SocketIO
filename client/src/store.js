@@ -3,7 +3,7 @@ import { thunk } from "redux-thunk";
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { userReducer } from "./state/reducers/userReducer";
 import { SelectedChat, accessChatReducer, chatUsersSearch, chatsReducers, createGroupChatReducer } from "./state/reducers/chatReducer";
-import { messageSendReducer } from './state/reducers/messageReducer';
+import { getAllMessagesReducer, messageSendReducer } from './state/reducers/messageReducer';
 
 const reducer = combineReducers({
     user: userReducer,
@@ -12,7 +12,8 @@ const reducer = combineReducers({
     searchUsers: chatUsersSearch,
     accessChat: accessChatReducer,
     creategroupChat: createGroupChatReducer,
-    messageSend: messageSendReducer
+    messageSend: messageSendReducer,
+    allMessages: getAllMessagesReducer,
 });
 
 
