@@ -1,6 +1,8 @@
 import { ACCESS_FAIL, ACCESS_REQUEST, ACCESS_SUCCESS, CHATS_FAIL, CHATS_REQUEST, CHATS_SUCCESS, CREATE_GROUP_CHAT_FAIL, CREATE_GROUP_CHAT_REQUEST, CREATE_GROUP_CHAT_SUCCESS, SELECTED_CHAT_FAIL, SELECTED_CHAT_REQUEST, SELECTED_CHAT_SUCCESS, USER_CHATS_SEARCH_FAIL, USER_CHATS_SEARCH_REQUEST, USER_CHATS_SEARCH_SUCCESS } from '../constants/chatConstant';
 import { accessChatUrl, addMembersToGroupURL, chatSearchUserUrl, chatUrl, createGroupChatURL, removeFromGroupURL, renameGroupURL } from '../../utils/requestUrls';
+import { getAllMessagesAction } from './messageActions';
 import buildClient from '../../utils/requestUrls';
+
 
 export const userChatList = ({ onSuccess, onFail }) => async (dispatch) => {
     try {
@@ -173,6 +175,18 @@ export const selectedChatAction = ({ chatId, chats, onSuccess, onFail }) => asyn
         // Assuming data.groupChat is a placeholder, modify it based on your actual data structure
         dispatch({ type: SELECTED_CHAT_SUCCESS, payload: selectedChat });
 
+
+        dispatch(getAllMessagesAction({
+            chatId,
+            onSuccess: (data) => {
+                // Handle success logic, e.g., redirect or any other action
+                console.log("all messages", data);
+            },
+            onFail: (errorMessage) => {
+                // Handle failure logic, e.g., show an error message
+                console.log(errorMessage)
+            },
+        }))
         // Call the onSuccess callback if provided
         if (onSuccess) {
             onSuccess(selectedChat);
