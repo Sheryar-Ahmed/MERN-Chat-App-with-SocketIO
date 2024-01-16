@@ -13,7 +13,8 @@ export const accessChatUrl = `/api/chat`;
 export const createGroupChatURL = `/api/chat/group`;
 export const renameGroupURL = `/api/chat/group/rename`;
 export const addMembersToGroupURL = `/api/chat/group/add`;
-export const removeFromGroupURL = `/api/chat/group/remove`;
+export const removeFromGroupURL = `/api/message/group/remove`;
+export const sendMessageURL = `/api/message`;  // POST
 
 const buildClient = () => {
     return axios.create({
