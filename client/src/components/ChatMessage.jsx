@@ -17,7 +17,7 @@ const ChatMessage = () => {
       <div className='w-full h-10 bg-[#f5f5f5] flex flex-row items-center justify-between p-2'>
         <div>
           {/* chatname */}
-          <span>{selectedChat && selectedChat.isGroupChat ? selectedChat.chatName : selectedChat.users[1].username}</span>
+          <span>{selectedChat && selectedChat.isGroupChat ? selectedChat.chatName :             selectedChat.users && selectedChat.users[1] && selectedChat.users[1].username}</span>
         </div>
         <div>
           {/* information user */}
