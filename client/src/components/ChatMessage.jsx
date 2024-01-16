@@ -1,17 +1,64 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import TextField from '@mui/material/TextField';
 import UserInfoModal from './UserInfor';
 import GroupModalUpdate from './GroupUpdateModal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { sendMessageAction } from '../state/actions/messageActions';
 
 const ChatMessage = () => {
+
+  const dispatch = useDispatch();
   const [userInfoOpen, setUserInfoOpen] = React.useState(false);
+  const [typing, setTyping] = React.useState("");
+  const [localMessages, setLocalMessages] = React.useState([]);
+  const chatContainerRef = React.useRef(null);
+
   const handleOpenUserInfo = () => setUserInfoOpen(true);
 
   const { selectedChat } = useSelector((state) => state.selectedChat);
   const { messages } = useSelector((state) => state.allMessages);
   const { user } = useSelector((state) => state.user);
+
+
+  const typingHanlder = (e) => {
+    console.log(e.target.value);
+    setTyping(e.target.value);
+  }
+  const sendMessageHanlder = (event) => {
+    if (event.key === 'Enter') {
+      dispatch(sendMessageAction({
+        content: typing,
+        chatId: selectedChat._id,
+        onSuccess: (data) => {
+          setTyping("");
+          setLocalMessages([...localMessages, data.message]); // Update local state
+          console.log("send messages", data)
+        },
+        onFail: (errorMessage) => {
+          // Handle failure logic, e.g., show an error message
+          toast.error(errorMessage, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      }));
+    }
+  };
+
+
+  // Scroll to the bottom when messages change
+  React.useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages, localMessages]);
 
   return (
     <div className='flex-1 p-4 h-[85vh]'>
@@ -41,8 +88,11 @@ const ChatMessage = () => {
       </div>
       <div className='w-full h-full flex flex-col items-start justify-between'>
         {/* chat messages */}
-        <div className='w-full h-full flex flex-col items-start justify-start gap-2 p-2 max-h-[60vh] overflow-y-auto'>
-          {messages?.map(
+        <div
+          ref={chatContainerRef}
+          className='w-full h-full flex flex-col items-start justify-start gap-2 p-2 max-h-[70] overflow-y-auto'
+        >
+          {[...messages, ...localMessages]?.map(
             (item) => <div
               key={item._id}
               className={`w-full flex flex-row
@@ -70,6 +120,9 @@ const ChatMessage = () => {
             label="Start Typing Your Message..."
             multiline
             maxRows={2}
+            onChange={typingHanlder}
+            value={typing}
+            onKeyPress={sendMessageHanlder}
             variant="standard"
           />
         </div>
