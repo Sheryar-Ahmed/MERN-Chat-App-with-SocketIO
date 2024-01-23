@@ -50,8 +50,30 @@ app.use(messageRoute);
 
 
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Listening on Port ${PORT}.`);
 });
 
 connectToDatabase();
+
+
+//socket implementation
+
+const io = require('socket.io')(server, {
+  pingTimeOut: 60000, //if didn't send any message for 60 sec, close the connection
+  cors: { origin: 'http://localhost:5173', credentials: true }
+});
+
+io.on("connection", (socket) => {
+  console.log("connected to socket.io");
+  // Send a message to the connected client
+  socket.on("setup", (userData) => {
+    socket.join(userData.id);
+    console.log(userData);
+    socket.emit("connected");
+  })
+  socket.on("join chat", (room) => {
+    socket.join(room);
+    console.log("User Joined Room:"+ room);
+  })
+});
