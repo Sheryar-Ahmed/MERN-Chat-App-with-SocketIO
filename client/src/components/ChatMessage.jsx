@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import TextField from '@mui/material/TextField';
 import UserInfoModal from './UserInfor';
 import GroupModalUpdate from './GroupUpdateModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendMessageAction } from '../state/actions/messageActions';
+import { io } from 'socket.io-client';
+import { HOST } from '../utils/requestUrls';
+
+var socket, selectedChatCompare;
 
 const ChatMessage = () => {
 
@@ -12,6 +16,7 @@ const ChatMessage = () => {
   const [userInfoOpen, setUserInfoOpen] = React.useState(false);
   const [typing, setTyping] = React.useState("");
   const [localMessages, setLocalMessages] = React.useState([]);
+  const [socketConnected, setSocketConnected] = React.useState(false);
   const chatContainerRef = React.useRef(null);
 
   const handleOpenUserInfo = () => setUserInfoOpen(true);
@@ -51,6 +56,13 @@ const ChatMessage = () => {
       }));
     }
   };
+
+  useEffect(() => {
+    socket = io(HOST);
+    socket.emit("setup", user);  // Emit the "setup" event with user data
+    socket.on("connected", () => setSocketConnected(true));
+    socket.emit("join chat", selectedChat._id);
+  }, [selectedChat]);
 
 
   // Scroll to the bottom when messages change
