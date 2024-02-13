@@ -14,7 +14,7 @@ const ChatList = () => {
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [openGroupChat, setOpenGroupChat] = useState(false);
   const handleGroupChatOpen = () => setOpenGroupChat(true);
-
+  const { user } = useSelector((state) => state.user);
   useEffect(() => {
     dispatch(
       userChatList({
@@ -107,7 +107,7 @@ const ChatList = () => {
           <ChatCard
             id={_id}
             Message={latestMessage?.content}
-            username={isGroupChat ? chatName : users[1].username}
+            username={isGroupChat ? chatName : users.filter((item) => item.id !== user.id)[0].username}
             Time={Time}
             isSelected={selectedChatId === _id}
             onClick={() => handleChatCardClick(_id, users[1])}
