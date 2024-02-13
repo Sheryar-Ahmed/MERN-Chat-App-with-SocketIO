@@ -24,7 +24,7 @@ const ChatMessage = () => {
   const { selectedChat } = useSelector((state) => state.selectedChat);
   const { messages } = useSelector((state) => state.allMessages);
   const { user } = useSelector((state) => state.user);
-
+  selectedChatCompare = messages;
 
   const typingHanlder = (e) => {
     console.log(e.target.value);
@@ -39,6 +39,7 @@ const ChatMessage = () => {
           setTyping("");
           setLocalMessages([...localMessages, data.message]); // Update local state
           console.log("send messages", data)
+          socket.emit("new message", data.message);
         },
         onFail: (errorMessage) => {
           // Handle failure logic, e.g., show an error message
@@ -61,8 +62,18 @@ const ChatMessage = () => {
     socket = io(HOST);
     socket.emit("setup", user);  // Emit the "setup" event with user data
     socket.on("connected", () => setSocketConnected(true));
-    socket.emit("join chat", selectedChat._id);
+    socket.emit("join chat", selectedChat.id);
   }, [selectedChat]);
+
+  useEffect(() => {
+    socket.on("message Received", (newMessageReceived) => {
+      if (!selectedChatCompare || selectedChatCompare.id !== newMessageReceived.chat.id) {
+        //give notification
+      } else {
+        setLocalMessages([...localMessages, newMessageReceived]);
+      }
+    });
+  });
 
 
   // Scroll to the bottom when messages change
@@ -78,7 +89,7 @@ const ChatMessage = () => {
       <div className='w-full h-10 bg-[#f5f5f5] flex flex-row items-center justify-between p-2'>
         <div>
           {/* chatname */}
-          <span>{selectedChat && selectedChat.isGroupChat ? selectedChat.chatName : selectedChat.users && selectedChat.users[1] && selectedChat.users[1].username}</span>
+          <span>{selectedChat && selectedChat.isGroupChat ? selectedChat.chatName : selectedChat.users && selectedChat?.users?.filter((item) => item.id !== user.id)[0].username}</span>
         </div>
         <div>
           {/* information user */}
@@ -91,7 +102,7 @@ const ChatMessage = () => {
             <GroupModalUpdate open={userInfoOpen} setOpen={setUserInfoOpen} groupInfo={selectedChat} />
           ) : (
             selectedChat.users && selectedChat.users[1] ? (
-              <UserInfoModal open={userInfoOpen} setOpen={setUserInfoOpen} user={selectedChat.users[1]} />
+              <UserInfoModal open={userInfoOpen} setOpen={setUserInfoOpen} user={selectedChat?.users?.filter((item) => item.id !== user.id)[0]} />
             ) : (
               <span>No user information available</span>
             )
