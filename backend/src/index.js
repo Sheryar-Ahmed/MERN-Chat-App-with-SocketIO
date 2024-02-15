@@ -76,6 +76,10 @@ io.on("connection", (socket) => {
     socket.join(room);
     console.log("User Joined Room:" + room);
   });
+  //check for start typing
+  socket.on("typing", (room) => socket.in(room).emit("typing"));
+    //check for stop typing
+  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 
   socket.on("new message", (newMessageReceived) => {
     console.log("new message socket", newMessageReceived);
