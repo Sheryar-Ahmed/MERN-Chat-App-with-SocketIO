@@ -15,6 +15,9 @@ const ChatMessage = () => {
   const dispatch = useDispatch();
   const [userInfoOpen, setUserInfoOpen] = React.useState(false);
   const [typing, setTyping] = React.useState("");
+  const [starttyping, setStartTyping] = React.useState(false);
+  const [istyping, setisTyping] = React.useState(false);
+
   const [localMessages, setLocalMessages] = React.useState([]);
   const [socketConnected, setSocketConnected] = React.useState(false);
   const chatContainerRef = React.useRef(null);
@@ -27,10 +30,34 @@ const ChatMessage = () => {
   selectedChatCompare = messages;
 
   const typingHanlder = (e) => {
-    console.log(e.target.value);
+
     setTyping(e.target.value);
-  }
+
+    if (!socketConnected) return;
+
+    if (!starttyping) {
+      setStartTyping(true);
+      socket.emit('typing', selectedChat.id);
+    }
+
+    //throtting or debounce funtion to stop
+    let lastTypingTime = new Date().getTime();
+    var timeLengthOut = 3000;
+
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+
+      if (timeDiff >= timeLengthOut && starttyping) {
+        socket.emit("stop typing", selectedChat.id);
+        setStartTyping(false);
+      }
+    }, [timeLengthOut]);
+
+}
+
   const sendMessageHanlder = (event) => {
+    socket.emit("stop typing", selectedChat.id);
     if (event.key === 'Enter') {
       dispatch(sendMessageAction({
         content: typing,
@@ -56,6 +83,7 @@ const ChatMessage = () => {
         }
       }));
     }
+
   };
 
   useEffect(() => {
@@ -63,6 +91,9 @@ const ChatMessage = () => {
     socket.emit("setup", user);  // Emit the "setup" event with user data
     socket.on("connected", () => setSocketConnected(true));
     socket.emit("join chat", selectedChat.id);
+    socket.on('typing', () => setisTyping(true));
+    socket.on('stop typing', () => setisTyping(false));
+
   }, [selectedChat]);
 
   useEffect(() => {
@@ -134,6 +165,10 @@ const ChatMessage = () => {
               </span>
             </div>
           )}
+        </div>
+        {/* typing indicator */}
+        <div>
+          {istyping ? <span>TYping...</span> : <></>}
         </div>
         {/* input messages user */}
         <div className='w-full flex flex-row justify-between items-center'>
