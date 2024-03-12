@@ -4,6 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { userReducer } from "./state/reducers/userReducer";
 import { SelectedChat, accessChatReducer, chatUsersSearch, chatsReducers, createGroupChatReducer } from "./state/reducers/chatReducer";
 import { getAllMessagesReducer, messageSendReducer } from './state/reducers/messageReducer';
+import { setNotificationReducer } from "./state/reducers/notification";
 
 const reducer = combineReducers({
     user: userReducer,
@@ -14,6 +15,7 @@ const reducer = combineReducers({
     creategroupChat: createGroupChatReducer,
     messageSend: messageSendReducer,
     allMessages: getAllMessagesReducer,
+    notification: setNotificationReducer
 });
 
 
