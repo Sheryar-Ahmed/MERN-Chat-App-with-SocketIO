@@ -27,7 +27,6 @@ const ChatMessage = () => {
   const { selectedChat } = useSelector((state) => state.selectedChat);
   const { messages } = useSelector((state) => state.allMessages);
   const { user } = useSelector((state) => state.user);
-  selectedChatCompare = messages;
 
   const typingHanlder = (e) => {
 
@@ -37,7 +36,7 @@ const ChatMessage = () => {
 
     if (!starttyping) {
       setStartTyping(true);
-      socket.emit('typing', selectedChat.id);
+      socket.emit('typing', selectedChat._id);
     }
 
     //throtting or debounce funtion to stop
@@ -49,15 +48,15 @@ const ChatMessage = () => {
       var timeDiff = timeNow - lastTypingTime;
 
       if (timeDiff >= timeLengthOut && starttyping) {
-        socket.emit("stop typing", selectedChat.id);
+        socket.emit("stop typing", selectedChat._id);
         setStartTyping(false);
       }
     }, [timeLengthOut]);
 
-}
+  }
 
   const sendMessageHanlder = (event) => {
-    socket.emit("stop typing", selectedChat.id);
+    socket.emit("stop typing", selectedChat._id);
     if (event.key === 'Enter') {
       dispatch(sendMessageAction({
         content: typing,
@@ -87,10 +86,12 @@ const ChatMessage = () => {
   };
 
   useEffect(() => {
+    setLocalMessages([]);
+    selectedChatCompare = selectedChat;
     socket = io(HOST);
     socket.emit("setup", user);  // Emit the "setup" event with user data
     socket.on("connected", () => setSocketConnected(true));
-    socket.emit("join chat", selectedChat.id);
+    socket.emit("join chat", selectedChat._id);
     socket.on('typing', () => setisTyping(true));
     socket.on('stop typing', () => setisTyping(false));
 
@@ -98,8 +99,9 @@ const ChatMessage = () => {
 
   useEffect(() => {
     socket.on("message Received", (newMessageReceived) => {
-      if (!selectedChatCompare || selectedChatCompare.id !== newMessageReceived.chat.id) {
+      if (!selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id) {
         //give notification
+        console.log("notifications");
       } else {
         setLocalMessages([...localMessages, newMessageReceived]);
       }
