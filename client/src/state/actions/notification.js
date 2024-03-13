@@ -1,4 +1,4 @@
-import { SET_NOTIFICATION_REQUEST, SET_NOTIFICA_FAIL, SET_NOTIFICA_SUCCESS } from "../constants/notification";
+import { SET_NOTIFICATION_REQUEST, SET_NOTIFICA_FAIL, SET_NOTIFICA_SUCCESS, REMOVE_NOTIFICATIONS } from "../constants/notification";
 // import { getAllMessagesAction } from "./chatActions";
 
 export const setNotification = ({ newMessageReceived, notification, onSuccess, onFail }) => async (dispatch) => {
@@ -33,4 +33,12 @@ export const setNotification = ({ newMessageReceived, notification, onSuccess, o
             onFail(errorMessage);
         }
     }
+};
+
+
+export const removeNotifications = (chatId) => {
+    return {
+        type: REMOVE_NOTIFICATIONS,
+        payload: chatId
+    };
 };

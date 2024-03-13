@@ -1,5 +1,4 @@
-import { SET_NOTIFICATION_REQUEST, SET_NOTIFICA_FAIL, SET_NOTIFICA_SUCCESS } from "../constants/notification";
-
+import { SET_NOTIFICATION_REQUEST, SET_NOTIFICA_FAIL, SET_NOTIFICA_SUCCESS, REMOVE_NOTIFICATIONS } from "../constants/notification";
 
 export const setNotificationReducer = (state = { notification: [] }, action) => {
     switch (action.type) {
@@ -21,6 +20,11 @@ export const setNotificationReducer = (state = { notification: [] }, action) => 
                 loading: false,
                 notification: [],
                 error: action.payload
+            };
+        case REMOVE_NOTIFICATIONS:
+            return {
+                ...state,
+                notification: state.notification.filter(notification => notification.chat._id !== action.payload),
             };
         default:
             return state;
