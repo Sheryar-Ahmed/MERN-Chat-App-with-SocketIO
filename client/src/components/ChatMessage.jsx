@@ -5,8 +5,10 @@ import UserInfoModal from './UserInfor';
 import GroupModalUpdate from './GroupUpdateModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendMessageAction } from '../state/actions/messageActions';
+import { setNotification } from '../state/actions/notification';
 import { io } from 'socket.io-client';
 import { HOST } from '../utils/requestUrls';
+import { toast, ToastContainer } from 'react-toastify';
 
 var socket, selectedChatCompare;
 
@@ -27,7 +29,7 @@ const ChatMessage = () => {
   const { selectedChat } = useSelector((state) => state.selectedChat);
   const { messages } = useSelector((state) => state.allMessages);
   const { user } = useSelector((state) => state.user);
-
+  const { notification } = useSelector((state) => state.notification);
   const typingHanlder = (e) => {
 
     setTyping(e.target.value);
@@ -101,7 +103,17 @@ const ChatMessage = () => {
     socket.on("message Received", (newMessageReceived) => {
       if (!selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id) {
         //give notification
-        console.log("notifications");
+        dispatch(setNotification({
+          newMessageReceived,
+          notification,
+          onSuccess: (data) => {
+            console.log("notification data", data);
+          },
+          onFail: (errorMessage) => {
+            // Handle failure logic, e.g., show an error message
+            console.log("error during notification", errorMessage);
+          }
+        }));
       } else {
         setLocalMessages([...localMessages, newMessageReceived]);
       }
