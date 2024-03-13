@@ -2,7 +2,7 @@ import { combineReducers, createStore, applyMiddleware } from "redux";
 import { thunk } from "redux-thunk";
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { userReducer } from "./state/reducers/userReducer";
-import { SelectedChat, accessChatReducer, chatUsersSearch, chatsReducers, createGroupChatReducer } from "./state/reducers/chatReducer";
+import { SelectedChat, accessChatReducer, chatUsersSearch, chatsReducers, createGroupChatReducer, selectChatIDReducer } from "./state/reducers/chatReducer";
 import { getAllMessagesReducer, messageSendReducer } from './state/reducers/messageReducer';
 import { setNotificationReducer } from "./state/reducers/notification";
 
@@ -15,7 +15,8 @@ const reducer = combineReducers({
     creategroupChat: createGroupChatReducer,
     messageSend: messageSendReducer,
     allMessages: getAllMessagesReducer,
-    notification: setNotificationReducer
+    notification: setNotificationReducer,
+    selectChat: selectChatIDReducer
 });
 
 
