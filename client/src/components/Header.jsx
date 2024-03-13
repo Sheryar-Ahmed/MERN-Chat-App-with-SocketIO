@@ -22,8 +22,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useDispatch, useSelector } from 'react-redux';
-import { userSearch } from '../state/actions/chatActions';
+import { selectChat, userSearch } from '../state/actions/chatActions';
 import SearchModal from './SearchModal';
+import { selectedChatAction } from '../state/actions/chatActions';
+import { removeNotifications } from "../state/actions/notification";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -233,6 +235,46 @@ export default function PrimarySearchAppBar(props) {
   };
 
   const { users, loading } = useSelector((state) => state.searchUsers);
+  const { chats } = useSelector(state => state.chats);
+
+  const handleNotificationClick = (notification) => {
+    // Find the chat related to the notification
+    const relatedChat = chats.find(chat => chat._id === notification.chat._id);
+    if (relatedChat) {
+      // Set the selected chat ID and dispatch the selected chat action
+      dispatch(selectChat(relatedChat._id));
+      dispatch(selectedChatAction({
+        chatId: relatedChat._id,
+        chats,
+        onSuccess: (data) => {
+          console.log("data for user", data)
+        },
+        onFail: (errorMessage) => {
+          // Handle failure logic, e.g., show an error message
+          toast.error(errorMessage, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      }));
+      dispatch(removeNotifications(relatedChat._id)); // Dispatch action to remove notifications
+    }
+  };
+
+
+
+
+
+
+
+
+
 
   return (
     <Box sx={{ width: '100%', flexGrow: 1 }}>
@@ -347,12 +389,11 @@ export default function PrimarySearchAppBar(props) {
         open={notificationMenuOpen}
         onClose={handleNotificationMenuClose}
       >
-        {notification && notification.map((notif, index) => (
+        {notification && notification?.length > 0 ? notification.map((notif, index) => (
           <MenuItem key={index} onClick={() => handleNotificationClick(notif)}>
-            {notif.content}
-            {console.log("message", notif)}
+            <b>{`${notif?.sender?.username}->`}</b>{notif.content}
           </MenuItem>
-        ))}
+        )) : <MenuItem>No Notification</MenuItem>}
       </Menu>
     </Box>
   );
