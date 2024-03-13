@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import ChatCard from './ChatCard';
-import { selectedChatAction, userChatList } from '../state/actions/chatActions';
+import { selectedChatAction, userChatList, selectChat } from '../state/actions/chatActions';
 import { useDispatch, useSelector } from 'react-redux';
 import GroupModal from './GroupModal';
 import { toast, ToastContainer } from 'react-toastify';
@@ -11,7 +11,7 @@ import { userDetails } from '../state/actions/userAction';
 
 const ChatList = () => {
   const dispatch = useDispatch();
-  const [selectedChatId, setSelectedChatId] = useState(null);
+  // const [selectedChatId, setSelectedChatId] = useState(null);
   const [openGroupChat, setOpenGroupChat] = useState(false);
   const handleGroupChatOpen = () => setOpenGroupChat(true);
   const { user } = useSelector((state) => state.user);
@@ -61,9 +61,11 @@ const ChatList = () => {
   }, [dispatch]);
 
   const { loading, chats } = useSelector((state) => state.chats);
+  const { selectedChatId } = useSelector((state) => state.selectChat);
 
   const handleChatCardClick = (chatId) => {
-    setSelectedChatId(chatId === selectedChatId ? null : chatId);
+    // setSelectedChatId(chatId === selectedChatId ? null : chatId);
+    dispatch(selectChat(chatId));
     dispatch(selectedChatAction({
       chatId,
       chats,
@@ -110,7 +112,7 @@ const ChatList = () => {
             username={isGroupChat ? chatName : users.filter((item) => item.id !== user.id)[0].username}
             Time={Time}
             isSelected={selectedChatId === _id}
-            onClick={() => handleChatCardClick(_id, users[1])}
+            onClick={() => handleChatCardClick(_id)}
           />
         ))}
       </div>
