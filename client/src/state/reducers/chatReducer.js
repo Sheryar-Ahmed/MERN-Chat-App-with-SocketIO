@@ -1,4 +1,4 @@
-import { ACCESS_FAIL, ACCESS_REQUEST, ACCESS_SUCCESS, CHATS_FAIL, CHATS_REQUEST, CHATS_SUCCESS, CREATE_GROUP_CHAT_FAIL, CREATE_GROUP_CHAT_REQUEST, CREATE_GROUP_CHAT_SUCCESS, SELECTED_CHAT_FAIL, SELECTED_CHAT_REQUEST, SELECTED_CHAT_SUCCESS, USER_CHATS_SEARCH_FAIL, USER_CHATS_SEARCH_REQUEST, USER_CHATS_SEARCH_SUCCESS } from '../constants/chatConstant';
+import { ACCESS_FAIL, ACCESS_REQUEST, ACCESS_SUCCESS, CHATS_FAIL, CHATS_REQUEST, CHATS_SUCCESS, CREATE_GROUP_CHAT_FAIL, CREATE_GROUP_CHAT_REQUEST, CREATE_GROUP_CHAT_SUCCESS, SELECTED_CHAT_FAIL, SELECTED_CHAT_REQUEST, SELECTED_CHAT_SUCCESS, USER_CHATS_SEARCH_FAIL, USER_CHATS_SEARCH_REQUEST, USER_CHATS_SEARCH_SUCCESS, SELECT_CHAT } from '../constants/chatConstant';
 
 export const chatsReducers = (state = { chats: [] }, action) => {
     switch (action.type) {
@@ -128,6 +128,19 @@ export const SelectedChat = (state = { selectedChat: {} }, action) => {
                 loading: false,
                 selectedChat: {},
                 error: action.payload
+            };
+        default:
+            return state;
+    }
+};
+
+
+export const selectChatIDReducer = (state = { selectedChatId: null, }, action) => {
+    switch (action.type) {
+        case SELECT_CHAT:
+            return {
+                ...state,
+                selectedChatId: action.payload,
             };
         default:
             return state;

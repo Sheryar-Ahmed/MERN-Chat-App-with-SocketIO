@@ -1,4 +1,4 @@
-import { ACCESS_FAIL, ACCESS_REQUEST, ACCESS_SUCCESS, CHATS_FAIL, CHATS_REQUEST, CHATS_SUCCESS, CREATE_GROUP_CHAT_FAIL, CREATE_GROUP_CHAT_REQUEST, CREATE_GROUP_CHAT_SUCCESS, SELECTED_CHAT_FAIL, SELECTED_CHAT_REQUEST, SELECTED_CHAT_SUCCESS, USER_CHATS_SEARCH_FAIL, USER_CHATS_SEARCH_REQUEST, USER_CHATS_SEARCH_SUCCESS } from '../constants/chatConstant';
+import { SELECT_CHAT, ACCESS_FAIL, ACCESS_REQUEST, ACCESS_SUCCESS, CHATS_FAIL, CHATS_REQUEST, CHATS_SUCCESS, CREATE_GROUP_CHAT_FAIL, CREATE_GROUP_CHAT_REQUEST, CREATE_GROUP_CHAT_SUCCESS, SELECTED_CHAT_FAIL, SELECTED_CHAT_REQUEST, SELECTED_CHAT_SUCCESS, USER_CHATS_SEARCH_FAIL, USER_CHATS_SEARCH_REQUEST, USER_CHATS_SEARCH_SUCCESS } from '../constants/chatConstant';
 import { accessChatUrl, addMembersToGroupURL, chatSearchUserUrl, chatUrl, createGroupChatURL, removeFromGroupURL, renameGroupURL } from '../../utils/requestUrls';
 import { getAllMessagesAction } from './messageActions';
 import buildClient from '../../utils/requestUrls';
@@ -203,7 +203,10 @@ export const selectedChatAction = ({ chatId, chats, onSuccess, onFail }) => asyn
         }
     }
 };
-
+export const selectChat = (chatId) => ({
+    type: SELECT_CHAT,
+    payload: chatId,
+});
 
 export const AddNewMembersToGroupAction = ({ groupInfo, currentUserId, chatId, userId, onSuccess, onFail }) => async (dispatch) => {
     try {
