@@ -68,15 +68,24 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const navItems = ['Home', 'About', 'Contact'];
 const drawerWidth = 240;
 
-
 export default function PrimarySearchAppBar(props) {
   const { window } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [notificationMenuOpen, setNotificationMenuOpen] = React.useState(false);
+  const { notification } = useSelector((state) => state.notification);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
+  };
+
+  const handleNotificationMenuOpen = () => {
+    setNotificationMenuOpen(true);
+  };
+
+  const handleNotificationMenuClose = () => {
+    setNotificationMenuOpen(false);
   };
 
   const drawer = (
@@ -165,13 +174,13 @@ export default function PrimarySearchAppBar(props) {
         </IconButton>
         <p>Messages</p>
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={handleNotificationMenuOpen}>
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={notification?.length || 0} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -191,8 +200,6 @@ export default function PrimarySearchAppBar(props) {
       </MenuItem>
     </Menu>
   );
-
-
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -225,12 +232,7 @@ export default function PrimarySearchAppBar(props) {
     }
   };
 
-
-
   const { users, loading } = useSelector((state) => state.searchUsers);
-
-
-
 
   return (
     <Box sx={{ width: '100%', flexGrow: 1 }}>
@@ -278,8 +280,9 @@ export default function PrimarySearchAppBar(props) {
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
+              onClick={handleNotificationMenuOpen}
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={notification?.length || 0} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -328,6 +331,29 @@ export default function PrimarySearchAppBar(props) {
           {drawer}
         </Drawer>
       </nav>
+      {/* Notification Menu */}
+      <Menu
+        anchorEl={mobileMoreAnchorEl}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        id={mobileMenuId}
+        keepMounted
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={notificationMenuOpen}
+        onClose={handleNotificationMenuClose}
+      >
+        {notification && notification.map((notif, index) => (
+          <MenuItem key={index} onClick={() => handleNotificationClick(notif)}>
+            {notif.content}
+            {console.log("message", notif)}
+          </MenuItem>
+        ))}
+      </Menu>
     </Box>
   );
 }
