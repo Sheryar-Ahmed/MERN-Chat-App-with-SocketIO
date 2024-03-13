@@ -1,10 +1,10 @@
 import { SET_NOTIFICATION_REQUEST, SET_NOTIFICA_FAIL, SET_NOTIFICA_SUCCESS } from "../constants/notification";
 // import { getAllMessagesAction } from "./chatActions";
 
-export const setNotification = ({ newMessageRecieved, notification, onSuccess, onFail }) => async (dispatch) => {
+export const setNotification = ({ newMessageReceived, notification, onSuccess, onFail }) => async (dispatch) => {
     try {
         dispatch({ type: SET_NOTIFICATION_REQUEST });
-        dispatch({ type: SET_NOTIFICA_SUCCESS, payload: [newMessageRecieved, ...notification] });
+        dispatch({ type: SET_NOTIFICA_SUCCESS, payload: [newMessageReceived, ...notification] });
 
 
         // dispatch(getAllMessagesAction({
@@ -20,7 +20,7 @@ export const setNotification = ({ newMessageRecieved, notification, onSuccess, o
         // }))
         // Call the onSuccess callback if provided
         if (onSuccess) {
-            onSuccess(newMessageRecieved);
+            onSuccess(newMessageReceived);
         }
     } catch (error) {
         console.log("Error during setting of notification", error);
