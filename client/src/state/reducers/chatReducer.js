@@ -20,6 +20,12 @@ export const chatsReducers = (state = { chats: [] }, action) => {
                 chats: [],
                 error: action.payload
             };
+        case ACCESS_SUCCESS:
+            // Adding the accessed chat to the chats array
+            return {
+                ...state,
+                chats: [...state.chats, action.payload]
+            };
         default:
             return state;
     }
