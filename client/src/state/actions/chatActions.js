@@ -92,7 +92,6 @@ export const accessChat = ({ userId, onSuccess, onFail }) => async (dispatch) =>
         };
 
         const { data } = await buildClient().post(accessChatUrl, { userId }, config);
-        console.log("data", data)
         dispatch({ type: ACCESS_SUCCESS, payload: data.FullChat });
 
         // Call the onSuccess callback if provided
