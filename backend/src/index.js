@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const authRoute = require("./routes/authRoute.js");
 const chatRoute = require("./routes/chatRoute.js");
 const messageRoute = require('./routes/messageRoute.js');
-
+const path = require('path');
 const cookieSession = require('cookie-session');
 dotenv.config();
 
@@ -36,11 +36,6 @@ const connectToDatabase = async () => {
   }
 }
 
-// Home page
-app.get('/', (req, res) => {
-  res.send("I am Live Bohoooooo");
-});
-
 // User auth router
 app.use(authRoute);
 // chat router
@@ -48,7 +43,24 @@ app.use(chatRoute);
 // message chat router
 app.use(messageRoute);
 
+const __dirname1 = path.resolve();
+if (!isDevelopment) {
+  app.use(express.static(path.join(__dirname1, "../client/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname1, "../client", "dist", "index.html"));
+  })
+} else {
+  // Home page
+  app.get('/', (req, res) => {
+    res.send("I am Live Bohoooooo");
+  });
 
+}
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
 const server = app.listen(PORT, () => {
   console.log(`Listening on Port ${PORT}.`);
@@ -77,7 +89,7 @@ io.on("connection", (socket) => {
   });
   //check for start typing
   socket.on("typing", (room) => socket.in(room).emit("typing"));
-    //check for stop typing
+  //check for stop typing
   socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 
   socket.on("new message", (newMessageReceived) => {
