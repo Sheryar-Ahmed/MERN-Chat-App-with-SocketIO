@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import { getCookieValue } from '../utils/cookieParser';
 import { userLogin } from '../state/actions/userAction';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -13,7 +12,6 @@ const Sigin = () => {
 
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -43,11 +41,10 @@ const Sigin = () => {
         }));
     }
 
+    const { user } = useSelector((state) => state.user);
 
     useEffect(() => {
-        const userToken = getCookieValue('session');
-        console.log("sessioncookievalue", userToken);
-        if (userToken) {
+        if (user) {
             navigate('/');
         }
     }, [])

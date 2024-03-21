@@ -8,13 +8,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import GroupModal from './GroupModal';
 import { toast, ToastContainer } from 'react-toastify';
 import { userDetails } from '../state/actions/userAction';
+import { useNavigate } from 'react-router-dom';
 
 const ChatList = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   // const [selectedChatId, setSelectedChatId] = useState(null);
   const [openGroupChat, setOpenGroupChat] = useState(false);
   const handleGroupChatOpen = () => setOpenGroupChat(true);
   const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/signin');
+    }
+  }, [])
   useEffect(() => {
     dispatch(
       userChatList({
