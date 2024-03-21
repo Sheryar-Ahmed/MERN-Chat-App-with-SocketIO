@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-export const HOST = 'http://localhost:3000';
+export const HOST = 'https://polite-grace-blackoops.koyeb.app';
 
 export const loginURL = `/api/users/login`;
 export const registerURL = `/api/users/register`;
