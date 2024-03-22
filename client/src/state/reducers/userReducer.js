@@ -7,7 +7,8 @@ import {
     REGISTER_FAIL,
     USER_DETAILS_REQUEST,
     USER_DETAILS_FAIL,
-    USER_DETAILS_SUCCESS
+    USER_DETAILS_SUCCESS,
+    SET_AUTHENTICATION
 } from '../constants/userConstant';
 
 export const userReducer = (state = { user: {} }, action) => {
@@ -39,6 +40,12 @@ export const userReducer = (state = { user: {} }, action) => {
                 user: null,
                 error: action.payload
             };
+        case SET_AUTHENTICATION:
+            return {
+                ...state,
+                loading: false,
+                isAuthenticated: action.payload
+            }
         default:
             return state;
     }

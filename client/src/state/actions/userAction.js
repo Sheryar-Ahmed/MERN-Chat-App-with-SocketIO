@@ -1,4 +1,4 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAIL, REGISTER_SUCCESS, REGISTER_FAIL, REGISTER_REQUEST, USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL } from '../constants/userConstant';
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAIL, REGISTER_SUCCESS, REGISTER_FAIL, REGISTER_REQUEST, USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL, SET_AUTHENTICATION } from '../constants/userConstant';
 import { loginURL, registerURL, userDetailsURL } from '../../utils/requestUrls';
 import buildClient from '../../utils/requestUrls';
 
@@ -100,6 +100,37 @@ export const userDetails = ({onFail, onSuccess}) => async (dispatch) => {
 
     dispatch({ type: USER_DETAILS_FAIL, payload: errorMessage });
 
+    // Call the onFail callback if provided
+    if (onFail) {
+      onFail(errorMessage);
+    }
+  }
+};
+
+export const authCheck = ({onFail, onSuccess}) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_DETAILS_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        'access-control-allow-credentials': true
+      },
+      withCredentials: true
+    };
+
+    const { data } = await buildClient().get('/api/users/authCheck', config);
+    dispatch({ type: SET_AUTHENTICATION, payload: data.isAuthenticated });
+
+    // Call the onSuccess callback if provided
+    if (onSuccess) {
+      onSuccess(data);
+    }
+  } catch (error) {
+    console.log("error during getting authCheck details", error);
+    const errorMessage = error?.response?.data?.errors?.length > 0
+      ? error?.response?.data?.errors[0]
+      : error?.response?.data?.message;
     // Call the onFail callback if provided
     if (onFail) {
       onFail(errorMessage);
