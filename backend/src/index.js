@@ -80,7 +80,7 @@ io.on("connection", (socket) => {
   console.log("connected to socket.io");
   // Send a message to the connected client
   socket.on("setup", (userData) => {
-    socket.join(userData.id);
+    socket.join(userData?.id);
     console.log(userData);
     socket.emit("connected");
   });
