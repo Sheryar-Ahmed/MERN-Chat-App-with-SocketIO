@@ -5,15 +5,38 @@ import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import { userLogin } from '../state/actions/userAction';
+import { authCheck, userLogin } from '../state/actions/userAction';
 import { useSelector, useDispatch } from 'react-redux';
 
 const Sigin = () => {
 
+
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        dispatch(authCheck({
+            onSuccess: (data) => {
+                console.log("data", data);
+                // Handle success logic, e.g., redirect or any other action
+                navigate('/');
+            },
+            onFail: (errorMessage) => {
+                toast.error("You need to login", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            }
+        }));
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -40,15 +63,6 @@ const Sigin = () => {
             }
         }));
     }
-
-    const { user } = useSelector((state) => state.user);
-
-    useEffect(() => {
-        if (user) {
-            navigate('/');
-        }
-    }, [])
-
 
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">

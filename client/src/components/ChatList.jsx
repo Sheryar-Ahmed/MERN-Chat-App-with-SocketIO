@@ -8,20 +8,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import GroupModal from './GroupModal';
 import { toast, ToastContainer } from 'react-toastify';
 import { userDetails } from '../state/actions/userAction';
-import { useNavigate } from 'react-router-dom';
 
 const ChatList = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const [selectedChatId, setSelectedChatId] = useState(null);
+  const { user } = useSelector((state) => state.user);
   const [openGroupChat, setOpenGroupChat] = useState(false);
   const handleGroupChatOpen = () => setOpenGroupChat(true);
-  const { user } = useSelector((state) => state.user);
-  useEffect(() => {
-    if (!user) {
-      navigate('/signin');
-    }
-  }, [])
   useEffect(() => {
     dispatch(
       userChatList({
@@ -71,7 +63,6 @@ const ChatList = () => {
   const { selectedChatId } = useSelector((state) => state.selectChat);
 
   const handleChatCardClick = (chatId) => {
-    // setSelectedChatId(chatId === selectedChatId ? null : chatId);
     dispatch(selectChat(chatId));
     dispatch(selectedChatAction({
       chatId,
@@ -80,7 +71,6 @@ const ChatList = () => {
         console.log("data for user", data)
       },
       onFail: (errorMessage) => {
-        // Handle failure logic, e.g., show an error message
         toast.error(errorMessage, {
           position: "top-right",
           autoClose: 5000,
@@ -116,7 +106,7 @@ const ChatList = () => {
           <ChatCard
             id={_id}
             Message={latestMessage?.content}
-            username={isGroupChat ? chatName : users.filter((item) => item.id !== user.id)[0].username}
+            username={isGroupChat ? chatName : users?.filter((item) => item?.id !== user.id)?.[0].username}
             Time={Time}
             isSelected={selectedChatId === _id}
             onClick={() => handleChatCardClick(_id)}
