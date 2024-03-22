@@ -126,7 +126,16 @@ const allUsers = async (req, res) => {
 }
 
 
-
+const authCheck = async (req, res) => {
+    if (req.session?.jwt) {
+        return res.status(200).json({
+            isAuthenticated: true
+        })
+    }
+    return res.status(401).json({
+        isAuthenticated: false,
+    })
+}
 
 
 const registrationSchema = joi.object({
@@ -140,4 +149,4 @@ const loginSchema = joi.object({
     password: joi.string().min(9).required(),
 });
 
-module.exports = { register, login, currentUserInfo, allUsers };
+module.exports = { register, login, currentUserInfo, allUsers, authCheck };
