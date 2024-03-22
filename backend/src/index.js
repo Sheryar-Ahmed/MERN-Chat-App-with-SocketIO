@@ -73,7 +73,7 @@ connectToDatabase();
 
 const io = require('socket.io')(server, {
   pingTimeOut: 60000, //if didn't send any message for 60 sec, close the connection
-  cors: { origin: 'http://localhost:5173', credentials: true }
+  cors: { origin: isDevelopment ? 'http://localhost:5173' : 'https://polite-grace-blackoops.koyeb.app', credentials: true }
 });
 
 io.on("connection", (socket) => {
