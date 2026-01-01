@@ -1170,8 +1170,8 @@ I'm a passionate Full Stack Developer with 2+ years of experience building scala
 ### **Connect With Me:**
 - 💼 **LinkedIn**: [linkedin.com/in/sheryar-ahmed](https://linkedin.com/in/sheryar-ahmed)
 - 🐙 **GitHub**: [github.com/sheryar-ahmed](https://github.com/sheryar-ahmed)
-- 📧 **Email**: sheryar.dev@example.com
-- 🌐 **Portfolio**: [sheryarahmed.dev](https://sheryarahmed.dev)
+- 📧 **Email**: royalsheryar505@gmail.com
+- 🌐 **Portfolio**: [sheryarahmed.netlify.com](https://sheryarahmed.netlify.com)
 
 ### **Hire Me For:**
 - Full-stack MERN application development
